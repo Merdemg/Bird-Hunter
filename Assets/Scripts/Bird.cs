@@ -6,12 +6,13 @@ using ScriptableObjectArchitecture;
 [CreateAssetMenu(fileName = "New Bird", menuName = "BirdHunterSO/Bird")]
 public class Bird : ScriptableObject
 {
-
     public float maxSpeedMultiplier;
     public float rotationSpeedMultiplier;
     public float accelerationMultiplier;
 
-    //public List<GameObject> possibleMeshHolders = new List<GameObject>();
+    /// <summary>
+    /// A list of colors that will be randomly assigned to the bird's mesh renderers
+    /// </summary>
     public List<Material> possibleColors = new List<Material>();
 
     public bool isHunter = false;

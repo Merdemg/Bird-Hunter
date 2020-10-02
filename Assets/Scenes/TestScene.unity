@@ -251,7 +251,7 @@ MonoBehaviour:
   gameAreaCentre: {fileID: 1762803667}
   overlapCheckLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1792
   innerWaypoints:
   - {fileID: 1940333941}
   - {fileID: 1152991067}

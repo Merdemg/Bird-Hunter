@@ -31,7 +31,8 @@ public class BirdBehaviour : MonoBehaviour
 
     const float TARGET_ARRIVAL_DISTANCE = 1f;
     const int BIRD_LAYER = 8;
-    const int hunterBirdLayer = 10;
+    const int ENVIRONMENT_LAYER = 9;
+    const int HUNTER_BIRD_LAYER = 10;
 
     [SerializeField] GameObject FlyAwayParticles = null;
 
@@ -163,13 +164,13 @@ public class BirdBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == BIRD_LAYER) // Other is a non-bully fish
+        if (other.gameObject.layer == BIRD_LAYER) // Other is a non-hunter bird
         {
             Vector3 dir = (this.transform.position - other.transform.position).normalized;
             flyToPos = this.transform.position + (dir * 2.5f);
 
         }
-        else if (other.gameObject.layer == 18) // other is a bully fish
+        else if (other.gameObject.layer == HUNTER_BIRD_LAYER) // other is a hunter bird
         {
 
             Vector3 dir = (this.transform.position - other.transform.position).normalized;

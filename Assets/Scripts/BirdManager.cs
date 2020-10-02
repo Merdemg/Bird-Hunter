@@ -5,28 +5,48 @@ using ScriptableObjectArchitecture;
 
 public class BirdManager : MonoBehaviour
 {
+    /// <summary>
+    /// How many birds need to be in the main game area at all timess
+    /// </summary>
     [SerializeField] IntVariable foregroundBirdCount = null;
+
+    /// <summary>
+    /// How many birds need to be in the background area at all times. When a bird in the foreground dies, we will assign a new one from the background to foreground.
+    /// </summary>
     [SerializeField] IntVariable backgroundBirdCount = null;
 
+    /// <summary>
+    /// List of different kind of birds to instantiate
+    /// </summary>
     [SerializeField] List<GameObject> birdObjects = new List<GameObject>();
 
     List<BirdBehaviour> foregroundBirds = new List<BirdBehaviour>();
     List<BirdBehaviour> backgroundBirds = new List<BirdBehaviour>();
 
+    /// <summary>
+    /// Centre of the game area where the majority of the birds will fly around
+    /// </summary>
     [SerializeField] Transform gameAreaCentre;
 
     const float gameAreaRadius = 10f;
 
+    /// <summary>
+    /// All layers the birds should avoid collision (other birds and environment)
+    /// </summary>
     [SerializeField] LayerMask overlapCheckLayerMask;
 
+
+    // Foreground and background birds use different waypoints
     [SerializeField] List<Transform> innerWaypoints = new List<Transform>();
     [SerializeField] List<Transform> backgroundWaypoints = new List<Transform>();
 
+    // When we assign a new fly to target point to a bird, we don't send them directly to the waypoint, we pick a point within a certain distance from that waypoin to keep things varied.
     const float WAYPOINT_RAND_AMOUNT = 2f;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Spawn all birds
         for (int i = 0; i < foregroundBirdCount.Value; i++)
         {
             SpawnBird(true);
@@ -48,7 +68,7 @@ public class BirdManager : MonoBehaviour
             {
                 spawnPos = GetRandomPointInGameArea();
                 i++;
-                hitColliders = Physics.OverlapSphere(spawnPos, 2f, overlapCheckLayerMask);
+                hitColliders = Physics.OverlapSphere(spawnPos, 2f, overlapCheckLayerMask); // Don't spawn on top of another bird or tree
             } while (hitColliders.Length > 0 && i < 30);
         }
         else // Spawn bird in background
