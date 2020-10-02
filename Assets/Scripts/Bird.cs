@@ -6,6 +6,7 @@ using ScriptableObjectArchitecture;
 [CreateAssetMenu(fileName = "New Bird", menuName = "BirdHunterSO/Bird")]
 public class Bird : ScriptableObject
 {
+
     public float maxSpeedMultiplier;
     public float rotationSpeedMultiplier;
     public float accelerationMultiplier;

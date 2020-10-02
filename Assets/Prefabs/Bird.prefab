@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   birdType: {fileID: 0}
+  defaultFlySpeed: {fileID: 11400000, guid: 9ec265cdf1b57e74fa622d4e2a7f6828, type: 2}
   isForegroundBird: 1
   renderersToAssignMaterial:
   - {fileID: 4618556842379293845}
@@ -143,6 +144,7 @@ MonoBehaviour:
   - {fileID: 3507316689373378152}
   - {fileID: 2160224119284736844}
   - {fileID: 4574209163999017998}
+  myCollider: {fileID: 1913723774461243349}
 --- !u!54 &103908422139573232
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -22,6 +22,8 @@ public class BirdManager : MonoBehaviour
     [SerializeField] List<Transform> innerWaypoints = new List<Transform>();
     [SerializeField] List<Transform> backgroundWaypoints = new List<Transform>();
 
+    const float WAYPOINT_RAND_AMOUNT = 2f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +58,7 @@ public class BirdManager : MonoBehaviour
 
         GameObject newBird = Instantiate(GetRandomBird(), spawnPos, Quaternion.identity);
         BirdBehaviour behaviour = newBird.GetComponent<BirdBehaviour>();
-        behaviour.isForegroundBird = isForeground;
+        behaviour.Initialize(this, isForeground);
 
         if (isForeground)
         {
@@ -92,5 +94,48 @@ public class BirdManager : MonoBehaviour
         return birdObjects[Random.Range(0, birdObjects.Count)];
     }
 
+    public Vector3 GetNewFlyPos(Vector3 currPos, Vector3 currDir, bool isForeground)
+    {
+        if (isForeground)
+        {
+            return GetPosToFly(currPos, currDir, innerWaypoints.ToArray());
+        }
+        else
+        {
+            return GetPosToFly(currPos, currDir, backgroundWaypoints.ToArray());
+        }
+    }
 
+    Vector3 GetPosToFly(Vector3 currPos, Vector3 currDir, Transform[] wPoints)
+    {
+        float minDistance = float.MaxValue;
+        int closestWPindex = 0;
+        for (int i = 0; i < wPoints.Length; i++)
+        {
+            float distance = Vector3.Distance(currPos, wPoints[i].position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestWPindex = i;
+            }
+        }
+
+        float minAngle = float.MaxValue;
+        int bestWPindex = 0;
+        for (int i = 0; i < wPoints.Length; i++)
+        {
+            if (i != closestWPindex)
+            {
+                float angle = Vector3.Angle(currDir, wPoints[i].position - currPos);
+                if (angle < minAngle)
+                {
+                    minAngle = angle;
+                    bestWPindex = i;
+                }
+            }
+        }
+
+        Vector3 randoPoint = Random.insideUnitSphere;
+        return wPoints[bestWPindex].position + (randoPoint * WAYPOINT_RAND_AMOUNT);
+    }
 }
