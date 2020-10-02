@@ -9,7 +9,7 @@ public class BirdBehaviour : MonoBehaviour
     [SerializeField] FloatVariable defaultFlySpeed = null;
 
     //[HideInInspector]
-    public bool isForegroundBird = true;
+    bool isForegroundBird = true;
 
     [SerializeField] List<Renderer> renderersToAssignMaterial = new List<Renderer>();
 
