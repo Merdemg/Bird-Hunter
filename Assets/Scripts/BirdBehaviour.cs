@@ -8,11 +8,12 @@ public class BirdBehaviour : MonoBehaviour
     [SerializeField] Bird birdType = null;
     [SerializeField] FloatVariable defaultFlySpeed = null;
 
-    //[HideInInspector]
     bool isForegroundBird = true;
 
+    // Just to differantiate different types of birds in this showcase, we assign them certain colors that we get from their birdType Scriptable Object
     [SerializeField] List<Renderer> renderersToAssignMaterial = new List<Renderer>();
 
+    // Target position to fly to
     Vector3 flyToPos;
 
     bool isInitialized = false;
@@ -21,6 +22,7 @@ public class BirdBehaviour : MonoBehaviour
 
     bool isTurning = false;
 
+    // We're not using Unity Physics to have better control over the movement
     float currentSpeed = 0f;
     float maxSpeed = 0f;
     float acceleration = 1f;
@@ -36,7 +38,7 @@ public class BirdBehaviour : MonoBehaviour
 
     [SerializeField] GameObject FlyAwayParticles = null;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         Material mat = birdType.possibleColors[Random.Range(0, birdType.possibleColors.Count)];
@@ -59,7 +61,7 @@ public class BirdBehaviour : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (isInitialized)
@@ -67,7 +69,7 @@ public class BirdBehaviour : MonoBehaviour
             Vector3 dirFromAtoB = (flyToPos - transform.position).normalized;
             float dotProduct = Vector3.Dot(dirFromAtoB, transform.forward);
 
-            if (dotProduct <= 0.98f)
+            if (dotProduct <= 0.98f) // This bird is not facing its target position atm
             {
                 isTurning = true;
                 if (currentSpeed > maxSpeed * 0.5f)
@@ -97,7 +99,7 @@ public class BirdBehaviour : MonoBehaviour
             FlyForward();
 
             if (Vector3.Distance(transform.position, flyToPos) < TARGET_ARRIVAL_DISTANCE 
-                || CheckIfFlyTargetIsInvalid(flyToPos - this.transform.position))
+                || CheckIfFlyTargetIsInvalid(flyToPos - this.transform.position)) // The bird is close enough to it's target, get a new one
             {
                 RecalculateFlyToTargetPosition();
             }
@@ -114,13 +116,16 @@ public class BirdBehaviour : MonoBehaviour
             i++;
         } while (CheckIfFlyTargetIsInvalid(flyToPos - this.transform.position) && i < 20);
 
-        if (i >= 20)
+        if (i >= 20)    // Failsafe
         {
             Debug.Log("avoidance calculation is taking too long. This shouldn't happen often.");
             flyToPos = this.transform.position + new Vector3(0, 4f, 0); // Just try to fly up then
         }
     }
 
+    /// <summary>
+    /// Sets the reference to the manager, and assigns the bird to the foreground or background
+    /// </summary>
     public void Initialize(BirdManager man, bool isForeground)
     {
         manager = man;

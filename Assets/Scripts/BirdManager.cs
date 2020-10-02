@@ -69,7 +69,7 @@ public class BirdManager : MonoBehaviour
                 spawnPos = GetRandomPointInGameArea();
                 i++;
                 hitColliders = Physics.OverlapSphere(spawnPos, 2f, overlapCheckLayerMask); // Don't spawn on top of another bird or tree
-            } while (hitColliders.Length > 0 && i < 30);
+            } while (hitColliders.Length > 0 && i < 30); // Failsafe in case game is set up too crowded
         }
         else // Spawn bird in background
         {
@@ -80,7 +80,7 @@ public class BirdManager : MonoBehaviour
         BirdBehaviour behaviour = newBird.GetComponent<BirdBehaviour>();
         behaviour.Initialize(this, isForeground);
 
-        if (isForeground)
+        if (isForeground)   // Keep track of the birds, so when one dies, we can send some from the background to the main game area.
         {
             foregroundBirds.Add(behaviour);
         }
@@ -99,7 +99,6 @@ public class BirdManager : MonoBehaviour
     Vector3 GetRandomPointInBackground()
     {
         Vector3 point;
-
         do
         {
             Vector3 randomPoint = Random.insideUnitSphere;
@@ -126,6 +125,9 @@ public class BirdManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Goes through all waypoints, ignores the closest, finds the one closest to current forward direction, and randomly picks a point within a certain distance from that waypoint
+    /// </summary>
     Vector3 GetPosToFly(Vector3 currPos, Vector3 currDir, Transform[] wPoints)
     {
         float minDistance = float.MaxValue;
